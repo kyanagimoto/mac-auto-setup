@@ -1,12 +1,4 @@
 #!/bin/bash
-cat << EOS
-
- AkkeyLab
-
- The elapsed time does not matter.
- Because speed is important.
-
-EOS
 
 function command_exists {
   command -v "$1" > /dev/null;
@@ -90,6 +82,8 @@ echo " ------------ END ------------"
 #
 if ! command_exists anyenv ; then
   echo "----------- Anyenv -------------"
+  brew install anyenv
+  anyenv init
 fi
 
 #
@@ -97,8 +91,7 @@ fi
 #
 if ! command_exists rbenv ; then
   echo " ----------- Ruby ------------"
-  brew install rbenv
-  brew install ruby-build
+  anyenv install rbenv
   rbenv --version
   rbenv install -l
   ruby_latest=$(rbenv install -l | grep -v '[a-z]' | tail -1 | sed 's/ //g')
@@ -107,6 +100,21 @@ if ! command_exists rbenv ; then
   rbenv rehash
   ruby -v
   echo " ------------ END ------------"
+fi
+
+#
+# Install python
+#
+if ! command_exists pyenv ; then
+  echo "---------- Python ----------"
+  anyenv install pyenv
+  pyenv --version
+  python_latest=$(pyenv install -l | grep -v '[a-z]' | tail -1 | sed 's/ //g')
+  pyenv install $python_latest
+  pyenv global $python_latest
+  pyenv rehash
+  python --version
+  echo "---------- END ----------"
 fi
 
 #
