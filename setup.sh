@@ -118,6 +118,21 @@ if ! command_exists pyenv ; then
 fi
 
 #
+# Install terraform
+#
+if command_exists terraform ; then
+  echo "---------- terraform ----------"
+  anyenv install tfenv
+  tfenv --version
+  terraform_version=v0.12.20
+  tfenv install $terraform_version
+  tfenv global $terraform_version
+  tfenv use $terraform_version
+  terraform version
+  echo "---------- END ----------"
+fi
+
+#
 # Install dotfiles system
 #
 echo " ---------- dotfiles ---------"
@@ -129,13 +144,11 @@ echo " ------------ END ------------"
 #
 # Install Node.js env
 #
-if ! command_exists nodebrew ; then
+if ! command_exists nodenv ; then
   echo " ---------- Node.js ----------"
-  curl -L git.io/nodebrew | perl - setup
-  nodebrew ls-remote
-  nodebrew install-binary latest
-  nodebrew ls
-  nodebrew use latest
+  anyenv install nodenv
+  nodenv init
+  nodenv install 0.10.26
   node -v
   npm -v
   echo " ------------ END ------------"
@@ -203,7 +216,8 @@ fi
 #
 if ! command_exists swiftenv ; then
   echo " --------- swiftenv ----------"
-  brew install kylef/formulae/swiftenv
+  anyenv install swiftenv
+  swiftenv install 2.2
   echo 'if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi' >> ~/.yadr/zsh/private.zsh
   swiftenv rehash
   echo " ------------ END ------------"
