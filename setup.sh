@@ -86,6 +86,13 @@ git clone https://github.com/powerline/fonts.git ~/fonts
 echo " ------------ END ------------"
 
 #
+# install anyenv
+#
+if ! command_exists anyenv ; then
+  echo "----------- Anyenv -------------"
+fi
+
+#
 # Install ruby
 #
 if ! command_exists rbenv ; then
@@ -167,12 +174,12 @@ fi
 #
 # CocoaPods
 #
-#if ! command_exists pod ; then
-#  echo " --------- CocoaPods ---------"
-#  echo $pass | sudo -S gem install -n /usr/local/bin cocoapods --pre
-#  pod setup
-#  echo " ------------ END ------------"
-#fi
+if ! command_exists pod ; then
+  echo " --------- CocoaPods ---------"
+  echo $pass | sudo -S gem install -n /usr/local/bin cocoapods --pre
+  pod setup
+  echo " ------------ END ------------"
+fi
 
 #
 # Carthage
