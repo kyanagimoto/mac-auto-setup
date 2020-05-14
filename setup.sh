@@ -167,12 +167,12 @@ fi
 #
 # CocoaPods
 #
-if ! command_exists pod ; then
-  echo " --------- CocoaPods ---------"
-  echo $pass | sudo -S gem install -n /usr/local/bin cocoapods --pre
-  pod setup
-  echo " ------------ END ------------"
-fi
+#if ! command_exists pod ; then
+#  echo " --------- CocoaPods ---------"
+#  echo $pass | sudo -S gem install -n /usr/local/bin cocoapods --pre
+#  pod setup
+#  echo " ------------ END ------------"
+#fi
 
 #
 # Carthage
