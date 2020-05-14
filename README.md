@@ -7,7 +7,7 @@ macOS Catalina 10.15.4
 ## Downloads
 To get started please run:
 ```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/AkkeyLab/mac-auto-setup/master/download.sh)"
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/kyanagimoto/mac-auto-setup/master/download.sh)"
 ```
 
 ## Installation
