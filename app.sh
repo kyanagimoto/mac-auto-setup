@@ -34,23 +34,24 @@ brew cask install gyazo
 brew cask install zoomus
 # brew cask install tandem
 # brew cask install discord
+brew cask install emacs
 
-while true; do
-  read -p 'Add "need license" apps? [Y/n]' Answer
-  case $Answer in
-    '' | [Yy]* )
-      brew cask install microsoft-office
-      brew cask install intellij-idea
-      brew cask install clip-studio-paint
-      break;
-      ;;
-    [Nn]* )
-      echo "Skip install"
-      break;
-      ;;
-    * )
-      echo Please answer YES or NO.
-  esac
-done;
+#while true; do
+#  read -p 'Add "need license" apps? [Y/n]' Answer
+#  case $Answer in
+#    '' | [Yy]* )
+#      brew cask install microsoft-office
+#      brew cask install intellij-idea
+#      brew cask install clip-studio-paint
+#      break;
+#      ;;
+#    [Nn]* )
+#      echo "Skip install"
+#      break;
+#      ;;
+#    * )
+#      echo Please answer YES or NO.
+#  esac
+#done;
 echo " ------------ END ------------"
 
