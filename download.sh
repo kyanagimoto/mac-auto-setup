@@ -1,12 +1,4 @@
 #!/bin/bash
-cat << EOS
-
- AkkeyLab
-
- The elapsed time does not matter.
- Because speed is important.
-
-EOS
 
 function command_exists {
   command -v "$1" > /dev/null;
@@ -38,5 +30,5 @@ fi
 # mac-auto-setup.git
 #
 echo " ---- mac-auto-setup.git -----"
-git clone https://github.com/AkkeyLab/mac-auto-setup.git
+git clone https://github.com/kyanagimoto/mac-auto-setup.git
 echo " ------------ END ------------"
