@@ -110,6 +110,7 @@ fi
 if ! command_exists pyenv ; then
   echo "---------- Python ----------"
   anyenv install pyenv
+  exec $SHELL -l
   pyenv --version
   python_latest=$(pyenv install -l | grep -v '[a-z]' | tail -1 | sed 's/ //g')
   pyenv install $python_latest
