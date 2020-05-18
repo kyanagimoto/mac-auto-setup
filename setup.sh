@@ -109,7 +109,7 @@ fi
 #
 echo " ---------- dotfiles ---------"
 sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
-cp $(cd $(dirname ${BASH_SOURCE:-$0}); pwd)/settings/zsh/private.zsh ~/.yadr/zsh/private.zsh
+cp ./settings/zsh/private.zsh ~/.yadr/zsh/private.zsh
 source ~/.zshrc
 echo " ------------ END ------------"
 
@@ -119,25 +119,6 @@ echo " ------------ END ------------"
 if ! command_exists yarn ; then
   echo " ----------- Yarn ------------"
   brew install yarn
-  echo " ------------ END ------------"
-fi
-
-#
-# TeX settings
-#
-if ! command_exists tex ; then
-  echo " ------------ TeX ------------"
-  brew cask install mactex
-  # Tex Live Utility > preference > path -> /Library/TeX/texbin
-  version=$(tex -version | grep -oE '2[0-9]{3}' | head -1)
-  echo $pass | sudo -S /usr/local/texlive/$version/bin/x86_64-darwin/tlmgr path add
-  echo $pass | sudo -S tlmgr update --self --all
-  # JPN Lang settings
-  cd /usr/local/texlive/$version/texmf-dist/scripts/cjk-gs-integrate
-  echo $pass | sudo -S perl cjk-gs-integrate.pl --link-texmf --force
-  echo $pass | sudo -S mktexlsr
-  echo $pass | sudo -S kanji-config-updmap-sys hiragino-elcapitan-pron
-  # Select ==> TeXShop > Preferences > Source > pTeX (ptex2pdf)
   echo " ------------ END ------------"
 fi
 
