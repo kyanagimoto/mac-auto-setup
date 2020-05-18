@@ -83,6 +83,7 @@ echo " ------------ END ------------"
 if ! command_exists anyenv ; then
   echo "----------- Anyenv -------------"
   brew install anyenv
+  echo 'eval "$(anyenv init -)"' >> ~/.zshrc
   anyenv init
   anyenv install --init
 fi
