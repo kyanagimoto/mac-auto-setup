@@ -84,6 +84,7 @@ if ! command_exists anyenv ; then
   echo "----------- Anyenv -------------"
   brew install anyenv
   anyenv init
+  anyenv install --init
 fi
 
 #
