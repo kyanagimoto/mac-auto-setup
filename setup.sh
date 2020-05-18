@@ -114,6 +114,20 @@ source ~/.zshrc
 echo " ------------ END ------------"
 
 #
+# Install Node.js env
+if ! command_exists nodebrew ; then
+  echo " ---------- Node.js ----------"
+  curl -L git.io/nodebrew | perl - setup
+  nodebrew ls-remote
+  nodebrew install-binary latest
+  nodebrew ls
+  nodebrew use latest
+  node -v
+  npm -v
+  echo " ------------ END ------------"
+fi
+
+#
 # Install Yarn
 #
 if ! command_exists yarn ; then
