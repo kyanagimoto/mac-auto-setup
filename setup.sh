@@ -165,6 +165,15 @@ if ! command_exists carthage ; then
   echo " ------------ END ------------"
 fi
 
+#
+# Install git-cz
+#
+if ! command_exists git-cz ; then
+  echo " ---------- git-cz ---------- "
+  npm install -g git-cz
+  echo " ---------- END ----------"
+fi
+
 while true; do
   read -p 'Now install web apps? [Y/n]' Answer
   case $Answer in
