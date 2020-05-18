@@ -21,7 +21,7 @@ brew cask install google-chrome
 brew cask install iterm2
 # brew cask install sourcetree
 brew cask install virtualbox
-brew cask install virtualbox-extension-pack
+# brew cask install virtualbox-extension-pack
 # brew cask install vlc
 brew cask install google-japanese-ime
 brew cask install swimat
