@@ -105,37 +105,6 @@ if ! command_exists rbenv ; then
 fi
 
 #
-# Install python
-#
-if ! command_exists pyenv ; then
-  echo "---------- Python ----------"
-  anyenv install pyenv
-  exec $SHELL -l
-  pyenv --version
-  python_latest=$(pyenv install -l | grep -v '[a-z]' | tail -1 | sed 's/ //g')
-  pyenv install $python_latest
-  pyenv global $python_latest
-  pyenv rehash
-  python --version
-  echo "---------- END ----------"
-fi
-
-#
-# Install terraform
-#
-if command_exists terraform ; then
-  echo "---------- terraform ----------"
-  anyenv install tfenv
-  tfenv --version
-  terraform_version=v0.12.20
-  tfenv install $terraform_version
-  tfenv global $terraform_version
-  tfenv use $terraform_version
-  terraform version
-  echo "---------- END ----------"
-fi
-
-#
 # Install dotfiles system
 #
 echo " ---------- dotfiles ---------"
@@ -143,19 +112,6 @@ sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/instal
 cp $(cd $(dirname ${BASH_SOURCE:-$0}); pwd)/settings/zsh/private.zsh ~/.yadr/zsh/private.zsh
 source ~/.zshrc
 echo " ------------ END ------------"
-
-#
-# Install Node.js env
-#
-if ! command_exists nodenv ; then
-  echo " ---------- Node.js ----------"
-  anyenv install nodenv
-  nodenv init
-  nodenv install 0.10.26
-  node -v
-  npm -v
-  echo " ------------ END ------------"
-fi
 
 #
 # Install Yarn
@@ -211,18 +167,6 @@ fi
 if ! command_exists carthage ; then
   echo " --------- Carthage ----------"
   brew install carthage
-  echo " ------------ END ------------"
-fi
-
-#
-# swiftenv
-#
-if ! command_exists swiftenv ; then
-  echo " --------- swiftenv ----------"
-  anyenv install swiftenv
-  swiftenv install 2.2
-  echo 'if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi' >> ~/.yadr/zsh/private.zsh
-  swiftenv rehash
   echo " ------------ END ------------"
 fi
 
