@@ -210,6 +210,16 @@ if ! command_exists kubectx ; then
 fi
 
 #
+# Install fzf
+#
+if ! command_exists fzf ; then
+    echo " ---------- fzf ---------- "
+    brew install fzf
+    $(brew --prefix)/opt/fzf/install
+    echo " ---------- END ---------- "
+fi
+
+#
 # Install azure-cli
 #
 if ! command_exists az ; then
