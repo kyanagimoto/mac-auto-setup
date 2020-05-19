@@ -209,6 +209,15 @@ if ! command_exists kubectx ; then
     echo " ---------- END ----------- "
 fi
 
+#
+# Install azure-cli
+#
+if ! command_exists az ; then
+    echo " ---------- az ---------- "
+    brew install azure-cli
+    echo " ---------- END ---------- "
+fi
+
 while true; do
   read -p 'Now install web apps? [Y/n]' Answer
   case $Answer in
