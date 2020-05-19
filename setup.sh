@@ -178,6 +178,37 @@ if ! command_exists git-cz ; then
   echo " ---------- END ----------"
 fi
 
+#
+# Install asdf
+#
+if ! command_exists asdf ; then
+    echo " ---------- asdf ---------- "
+    brew install asdf
+    echo '. $(brew --prefix asdf)/asdf.sh' >> ~/.zshrc
+    echo " ---------- END ---------- "
+fi
+
+#
+# Install kubectl
+#
+if ! command_exists kubectl ; then
+    echo " ---------- kubectl ---------- "
+    asdf plugin-add kubectl
+    asdf install kubectl 1.15.10
+    asdf global kubectl 1.15.10
+    kubectl version
+    echo " ---------- END ----------"
+fi
+
+#
+# Install kubectx
+#
+if ! command_exists kubectx ; then
+    echo " ---------- kubectx ---------- "
+    brew install kubectx
+    echo " ---------- END ----------- "
+fi
+
 while true; do
   read -p 'Now install web apps? [Y/n]' Answer
   case $Answer in
