@@ -63,7 +63,8 @@ fi
 #
 if ! command_exists vim ; then
   echo " ------------ Vim ------------"
-  brew install vim --with-override-system-vi
+  brew unlink macvim
+  brew install vim
   echo " ------------ END ------------"
 fi
 
@@ -86,6 +87,9 @@ if ! command_exists anyenv ; then
   echo 'eval "$(anyenv init -)"' >> ~/.zshrc
   anyenv init
   anyenv install --init
+  mkdir -p $(anyenv root)/plugins
+  git clone https://github.com/znz/anyenv-update.git $(anyenv root)/plugins/anyenv-update
+  anyenv update
 fi
 
 #
