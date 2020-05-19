@@ -35,6 +35,7 @@ brew cask install zoomus
 # brew cask install tandem
 # brew cask install discord
 brew cask install emacs
+brew cask install viber
 
 #while true; do
 #  read -p 'Add "need license" apps? [Y/n]' Answer
