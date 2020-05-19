@@ -1,12 +1,4 @@
 #!/bin/bash
-cat << EOS
-
- AkkeyLab
-
- The elapsed time does not matter.
- Because speed is important.
-
-EOS
 
 function command_exists {
   command -v "$1" > /dev/null;
@@ -19,7 +11,6 @@ if ! command_exists brew ; then
   echo " --------- Homebrew ----------"
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
   brew update
-  brew upgrade --all --cleanup
   brew -v
   echo " ------------ END ------------"
 fi
@@ -38,5 +29,5 @@ fi
 # mac-auto-setup.git
 #
 echo " ---- mac-auto-setup.git -----"
-git clone https://github.com/AkkeyLab/mac-auto-setup.git
+git clone https://github.com/kyanagimoto/mac-auto-setup.git
 echo " ------------ END ------------"

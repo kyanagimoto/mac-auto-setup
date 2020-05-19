@@ -63,7 +63,8 @@ fi
 #
 if ! command_exists vim ; then
   echo " ------------ Vim ------------"
-  brew install vim --with-override-system-vi
+  brew unlink macvim
+  brew install vim
   echo " ------------ END ------------"
 fi
 
@@ -83,7 +84,12 @@ echo " ------------ END ------------"
 if ! command_exists anyenv ; then
   echo "----------- Anyenv -------------"
   brew install anyenv
+  echo 'eval "$(anyenv init -)"' >> ~/.zshrc
   anyenv init
+  anyenv install --init
+  mkdir -p $(anyenv root)/plugins
+  git clone https://github.com/znz/anyenv-update.git $(anyenv root)/plugins/anyenv-update
+  anyenv update
 fi
 
 #
@@ -103,52 +109,23 @@ if ! command_exists rbenv ; then
 fi
 
 #
-# Install python
-#
-if ! command_exists pyenv ; then
-  echo "---------- Python ----------"
-  anyenv install pyenv
-  pyenv --version
-  python_latest=$(pyenv install -l | grep -v '[a-z]' | tail -1 | sed 's/ //g')
-  pyenv install $python_latest
-  pyenv global $python_latest
-  pyenv rehash
-  python --version
-  echo "---------- END ----------"
-fi
-
-#
-# Install terraform
-#
-if command_exists terraform ; then
-  echo "---------- terraform ----------"
-  anyenv install tfenv
-  tfenv --version
-  terraform_version=v0.12.20
-  tfenv install $terraform_version
-  tfenv global $terraform_version
-  tfenv use $terraform_version
-  terraform version
-  echo "---------- END ----------"
-fi
-
-#
 # Install dotfiles system
 #
 echo " ---------- dotfiles ---------"
 sh -c "`curl -fsSL https://raw.githubusercontent.com/skwp/dotfiles/master/install.sh`"
-cp $(cd $(dirname ${BASH_SOURCE:-$0}); pwd)/settings/zsh/private.zsh ~/.yadr/zsh/private.zsh
+cp ./settings/zsh/private.zsh ~/.yadr/zsh/private.zsh
 source ~/.zshrc
 echo " ------------ END ------------"
 
 #
 # Install Node.js env
-#
-if ! command_exists nodenv ; then
+if ! command_exists nodebrew ; then
   echo " ---------- Node.js ----------"
-  anyenv install nodenv
-  nodenv init
-  nodenv install 0.10.26
+  curl -L git.io/nodebrew | perl - setup
+  nodebrew ls-remote
+  nodebrew install-binary latest
+  nodebrew ls
+  nodebrew use latest
   node -v
   npm -v
   echo " ------------ END ------------"
@@ -160,25 +137,6 @@ fi
 if ! command_exists yarn ; then
   echo " ----------- Yarn ------------"
   brew install yarn
-  echo " ------------ END ------------"
-fi
-
-#
-# TeX settings
-#
-if ! command_exists tex ; then
-  echo " ------------ TeX ------------"
-  brew cask install mactex
-  # Tex Live Utility > preference > path -> /Library/TeX/texbin
-  version=$(tex -version | grep -oE '2[0-9]{3}' | head -1)
-  echo $pass | sudo -S /usr/local/texlive/$version/bin/x86_64-darwin/tlmgr path add
-  echo $pass | sudo -S tlmgr update --self --all
-  # JPN Lang settings
-  cd /usr/local/texlive/$version/texmf-dist/scripts/cjk-gs-integrate
-  echo $pass | sudo -S perl cjk-gs-integrate.pl --link-texmf --force
-  echo $pass | sudo -S mktexlsr
-  echo $pass | sudo -S kanji-config-updmap-sys hiragino-elcapitan-pron
-  # Select ==> TeXShop > Preferences > Source > pTeX (ptex2pdf)
   echo " ------------ END ------------"
 fi
 
@@ -212,15 +170,12 @@ if ! command_exists carthage ; then
 fi
 
 #
-# swiftenv
+# Install git-cz
 #
-if ! command_exists swiftenv ; then
-  echo " --------- swiftenv ----------"
-  anyenv install swiftenv
-  swiftenv install 2.2
-  echo 'if which swiftenv > /dev/null; then eval "$(swiftenv init -)"; fi' >> ~/.yadr/zsh/private.zsh
-  swiftenv rehash
-  echo " ------------ END ------------"
+if ! command_exists git-cz ; then
+  echo " ---------- git-cz ---------- "
+  npm install -g git-cz
+  echo " ---------- END ----------"
 fi
 
 while true; do

@@ -21,7 +21,7 @@ brew cask install google-chrome
 brew cask install iterm2
 # brew cask install sourcetree
 brew cask install virtualbox
-brew cask install virtualbox-extension-pack
+# brew cask install virtualbox-extension-pack
 # brew cask install vlc
 brew cask install google-japanese-ime
 brew cask install swimat
@@ -35,6 +35,8 @@ brew cask install zoomus
 # brew cask install tandem
 # brew cask install discord
 brew cask install emacs
+brew cask install viber
+brew cask install alfred
 
 #while true; do
 #  read -p 'Add "need license" apps? [Y/n]' Answer
@@ -54,4 +56,3 @@ brew cask install emacs
 #  esac
 #done;
 echo " ------------ END ------------"
-
