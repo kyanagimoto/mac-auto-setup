@@ -3,6 +3,9 @@
 (unless (server-running-p)
   (server-start))
 
+;; line number
+(global-linum-mode t)
+
 ;; Melpa
 (require 'package)
 (let* ((no-ssl (and (memq system-type '(windows-nt ms-dos))
@@ -45,16 +48,35 @@ There are two things you can do about this warning:
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ag-highligh-search t t)
- '(ag-reuse-buffers t)
- '(ag-reuse-window t)
+ '(ag-reuse-buffers t t)
+ '(ag-reuse-window t t)
+ '(counsel-grep-base-command
+   "ag -S --noheading --nocolor --nofilename --numbers '%s' %s")
+ '(counsel-yank-pop-height 15 t)
+ '(dashboard-items
+   (quote
+    ((recents . 15)
+     (projects . 5))))
+ '(dashboard-startup-banner 4)
  '(doom-themes-enable-bold t)
  '(doom-themes-enable-italic t)
+ '(enable-recursive-minibuffers t)
  '(highlight-indent-guides-auto-enabled t)
  '(highlight-indent-guides-method (quote character))
  '(highlight-indent-guides-responsive t)
+ '(ivy-display-function (quote ivy-posframe-display-at-frame-center) t)
+ '(ivy-ghq-short-list t t)
+ '(ivy-on-del-error-function nil)
+ '(ivy-posframe-parameters (quote ((left-fringe . 5) (right-fringe . 5))) t)
+ '(ivy-use-selectable-prompt t)
+ '(ivy-use-virtual-buffers t)
  '(package-selected-packages
    (quote
-    (dashboard wgrep-ag counsel-projectile amx flx ag highlight-indent-guides all-the-icons-ivy all-the-icons-ivy-rich ivy-rich dumb-jump projectile-rails undo-tree robe ruby-electric company-inf-ruby company counsel ivy use-package doom-themes doom-modeline))))
+    (zoom dimmer company-terraform dashboard wgrep-ag counsel-projectile amx flx ag highlight-indent-guides all-the-icons-ivy all-the-icons-ivy-rich ivy-rich dumb-jump projectile-rails undo-tree robe ruby-electric company-inf-ruby company counsel ivy use-package doom-themes doom-modeline)))
+ '(swiper-action-recenter t)
+ '(wgrep-auto-save-buffer t t)
+ '(wgrep-change-readonly-file t t)
+ '(wgrep-enable-key "e" t))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -425,11 +447,40 @@ There are two things you can do about this warning:
     :custom
     (dashboard-startup-banner 4)
     (dashboard-items '((recents . 15)
-               (projects . 5)
-               (bookmarks . 5)
-               (agenda . 5)))
+               (projects . 5)))
     :hook
-    (after-init . dashboard-setup-startup-hook)
-    :config
-    (add-to-list 'dashboard-items '(agenda) t))
+    (after-init . dashboard-setup-startup-hook))
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
+
+;; terraform
+(require 'company-terraform)
+(company-terraform-init)
+
+(setq make-backup-files nil)
+(setq delete-auto-save-files t)
+(setq-default tab-width 4 indent-tabs-mode nil)
+
+;; dimmer
+(use-package dimmer
+  :config
+  (dimmer-mode))
+
+;; zoom
+(use-package zoom
+  :config
+  (zoom-mode))
+(custom-set-variables
+ '(zoom-size '(0.618 . 0.618)))
+
+;; buffer-expose
+(buffer-expose-mode 1)
+(defvar buffer-expose-mode-map
+  (let ((map (make-sparse-keymap)))
+    (define-key map (kbd "<s-tab>") 'buffer-expose)
+    (define-key map (kbd "<C-tab>") 'buffer-expose-no-stars)
+    (define-key map (kbd "C-c <C-tab>") 'buffer-expose-current-mode)
+    (define-key map (kbd "C-c C-m") 'buffer-expose-major-mode)
+    (define-key map (kbd "C-c C-d") 'buffer-expose-dired-buffers)
+    (define-key map (kbd "C-c C-*") 'buffer-expose-stars)
+    map)
+  "Mode map for command `buffer-expose-mode'.")
