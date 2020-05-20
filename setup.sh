@@ -228,6 +228,15 @@ if ! command_exists az ; then
     echo " ---------- END ---------- "
 fi
 
+#
+# Install ag
+#
+if ! command_exists ag ; then
+    echo " ---------- ag ---------- "
+    brew install the_silver_searcher
+    echo " ---------- END ---------- "
+fi
+
 while true; do
   read -p 'Now install web apps? [Y/n]' Answer
   case $Answer in
