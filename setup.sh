@@ -228,6 +228,15 @@ if ! command_exists az ; then
     echo " ---------- END ---------- "
 fi
 
+#
+# Install peco
+#
+if ! command_exists peco ; then
+    echo " ---------- peco ---------- "
+    brew install peco
+    echo " ---------- END ---------- "
+fi
+
 while true; do
   read -p 'Now install web apps? [Y/n]' Answer
   case $Answer in
