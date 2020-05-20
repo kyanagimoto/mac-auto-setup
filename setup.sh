@@ -237,6 +237,17 @@ if ! command_exists peco ; then
     echo " ---------- END ---------- "
 fi
 
+#
+# Install terraform
+#
+if ! command_exists terraform ; then
+    echo " ---------- terraform ---------- "
+    anyenv install tfenv
+    tfenv install latest
+    tfenv use latest
+    echo " ---------- END ---------- "
+fi
+
 while true; do
   read -p 'Now install web apps? [Y/n]' Answer
   case $Answer in
