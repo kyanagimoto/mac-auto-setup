@@ -248,6 +248,26 @@ if ! command_exists terraform ; then
     echo " ---------- END ---------- "
 fi
 
+#
+# Install go
+#
+if ! command_exists go ; then
+    echo " ---------- go ---------- "
+    anyenv install goenv
+    exec $SHELL -l
+    goenv install 1.14.2
+    echo " ---------- END ---------- "
+fi
+
+#
+# Install jq
+#
+if ! command_exists jq ; then
+    echo " ---------- jq ---------- "
+    brew install jq
+    echo " ---------- END ---------- "
+fi
+
 while true; do
   read -p 'Now install web apps? [Y/n]' Answer
   case $Answer in
