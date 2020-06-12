@@ -50,17 +50,18 @@ There are two things you can do about this warning:
  '(ag-highligh-search t t)
  '(ag-reuse-buffers t t)
  '(ag-reuse-window t t)
+ '(beacon-color "yellow")
  '(counsel-grep-base-command
    "ag -S --noheading --nocolor --nofilename --numbers '%s' %s")
  '(counsel-yank-pop-height 15 t)
- '(dashboard-items
-   (quote
-    ((recents . 15)
-     (projects . 5))))
+ '(dashboard-items (quote ((recents . 15) (projects . 5))))
  '(dashboard-startup-banner 4)
  '(doom-themes-enable-bold t)
  '(doom-themes-enable-italic t)
  '(enable-recursive-minibuffers t)
+ '(git-gutter:added-sign "+")
+ '(git-gutter:deleted-sign "-")
+ '(git-gutter:modified-sign "~")
  '(highlight-indent-guides-auto-enabled t)
  '(highlight-indent-guides-method (quote character))
  '(highlight-indent-guides-responsive t)
@@ -72,20 +73,29 @@ There are two things you can do about this warning:
  '(ivy-use-virtual-buffers t)
  '(package-selected-packages
    (quote
-    (zoom dimmer company-terraform dashboard wgrep-ag counsel-projectile amx flx ag highlight-indent-guides all-the-icons-ivy all-the-icons-ivy-rich ivy-rich dumb-jump projectile-rails undo-tree robe ruby-electric company-inf-ruby company counsel ivy use-package doom-themes doom-modeline)))
+    (undohist auto-sudoedit rust-mode anzu presentation org-pomodoro beacon rainbow-delimiters volatile-highlights org-plus-contrib zoom dimmer company-terraform dashboard wgrep-ag counsel-projectile amx flx ag highlight-indent-guides all-the-icons-ivy all-the-icons-ivy-rich ivy-rich dumb-jump projectile-rails undo-tree robe ruby-electric company-inf-ruby company counsel ivy use-package doom-themes doom-modeline)))
+ '(show-paren-style (quote mixed))
+ '(show-paren-when-point-in-periphery t)
+ '(show-paren-when-point-inside-paren t)
  '(swiper-action-recenter t)
  '(wgrep-auto-save-buffer t t)
  '(wgrep-change-readonly-file t t)
- '(wgrep-enable-key "e" t))
+ '(wgrep-enable-key "e" t)
+ '(zoom-size (quote (0.618 . 0.618))))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(doom-modeline-bar ((t (:background "#6272a4"))))
+ '(git-gutter:added ((t (:background "#50fa7b"))))
+ '(git-gutter:deleted ((t (:background "#ff79c6"))))
+ '(git-gutter:modified ((t (:background "#f1fa8c"))))
  '(ivy-posframe ((t (:background "#282a36"))))
  '(ivy-posframe-border ((t (:background "#6272a4"))))
- '(ivy-posframe-cursor ((t (:background "#61bfff")))))
+ '(ivy-posframe-cursor ((t (:background "#61bfff"))))
+ '(show-paren-match ((nil (:background "#44475a" :foreground "#f1fa8c"))))
+ '(vhl/default-face ((nil (:foreground "#FF3333" :background "#FFCDCD")))))
 
 ;; ag
 (use-package ag
@@ -152,88 +162,88 @@ There are two things you can do about this warning:
   (wgrep-change-readonly-file t))
 
 ;; ivy
-  (use-package counsel
-    :diminish ivy-mode counsel-mode
-    :defines
-    (projectile-completion-system magit-completing-read-function)
-    :bind
-    (("C-s" . swiper)
-    ("M-s r" . ivy-resume)
-    ("C-c v p" . ivy-push-view)
-    ("C-c v o" . ivy-pop-view)
-    ("C-c v ." . ivy-switch-view)
-    ("M-s c" . counsel-ag)
-    ("M-o f" . counsel-fzf)
-    ("M-o r" . counsel-recentf)
-    ("M-y" . counsel-yank-pop)
-    :map ivy-minibuffer-map
-    ("C-w" . ivy-backward-kill-word)
-    ("C-k" . ivy-kill-line)
-    ("C-j" . ivy-immediate-done)
-    ("RET" . ivy-alt-done)
-    ("C-h" . ivy-backward-delete-char))
-    :preface
-    (defun ivy-format-function-pretty (cands)
-      "Transform CANDS into a string for minibuffer."
-      (ivy--format-function-generic
-       (lambda (str)
-         (concat
-             (all-the-icons-faicon "hand-o-right" :height .85 :v-adjust .05 :face 'font-lock-constant-face)
-             (ivy--add-face str 'ivy-current-match)))
-       (lambda (str)
-         (concat "  " str))
-       cands
-       "\n"))
-    :hook
-    (after-init . ivy-mode)
-    (ivy-mode . counsel-mode)
-    :custom
-    (counsel-yank-pop-height 15)
-    (enable-recursive-minibuffers t)
-    (ivy-use-selectable-prompt t)
-    (ivy-use-virtual-buffers t)
-    (ivy-on-del-error-function nil)
-    (swiper-action-recenter t)
-    (counsel-grep-base-command "ag -S --noheading --nocolor --nofilename --numbers '%s' %s")
-    :config
-    ;; using ivy-format-fuction-arrow with counsel-yank-pop
-    (advice-add
-    'counsel--yank-pop-format-function
-    :override
-    (lambda (cand-pairs)
-      (ivy--format-function-generic
-       (lambda (str)
-         (mapconcat
-          (lambda (s)
-            (ivy--add-face (concat (propertize "┃ " 'face `(:foreground "#61bfff")) s) 'ivy-current-match))
-          (split-string
-           (counsel--yank-pop-truncate str) "\n" t)
-          "\n"))
-       (lambda (str)
-         (counsel--yank-pop-truncate str))
-       cand-pairs
-       counsel-yank-pop-separator)))
+(use-package counsel
+  :diminish ivy-mode counsel-mode
+  :defines
+  (projectile-completion-system magit-completing-read-function)
+  :bind
+  (("C-s" . swiper)
+   ("M-s r" . ivy-resume)
+   ("C-c v p" . ivy-push-view)
+   ("C-c v o" . ivy-pop-view)
+   ("C-c v ." . ivy-switch-view)
+   ("M-s c" . counsel-ag)
+   ("M-o f" . counsel-fzf)
+   ("M-o r" . counsel-recentf)
+   ("M-y" . counsel-yank-pop)
+   :map ivy-minibuffer-map
+   ("C-w" . ivy-backward-kill-word)
+   ("C-k" . ivy-kill-line)
+   ("C-j" . ivy-immediate-done)
+   ("RET" . ivy-alt-done)
+   ("C-h" . ivy-backward-delete-char))
+  :preface
+  (defun ivy-format-function-pretty (cands)
+    "Transform CANDS into a string for minibuffer."
+    (ivy--format-function-generic
+     (lambda (str)
+       (concat
+        (all-the-icons-faicon "hand-o-right" :height .85 :v-adjust .05 :face 'font-lock-constant-face)
+        (ivy--add-face str 'ivy-current-match)))
+     (lambda (str)
+       (concat "  " str))
+     cands
+     "\n"))
+  :hook
+  (after-init . ivy-mode)
+  (ivy-mode . counsel-mode)
+  :custom
+  (counsel-yank-pop-height 15)
+  (enable-recursive-minibuffers t)
+  (ivy-use-selectable-prompt t)
+  (ivy-use-virtual-buffers t)
+  (ivy-on-del-error-function nil)
+  (swiper-action-recenter t)
+  (counsel-grep-base-command "ag -S --noheading --nocolor --nofilename --numbers '%s' %s")
+  :config
+  ;; using ivy-format-fuction-arrow with counsel-yank-pop
+  (advice-add
+   'counsel--yank-pop-format-function
+   :override
+   (lambda (cand-pairs)
+     (ivy--format-function-generic
+      (lambda (str)
+        (mapconcat
+         (lambda (s)
+           (ivy--add-face (concat (propertize "┃ " 'face `(:foreground "#61bfff")) s) 'ivy-current-match))
+         (split-string
+          (counsel--yank-pop-truncate str) "\n" t)
+         "\n"))
+      (lambda (str)
+        (counsel--yank-pop-truncate str))
+      cand-pairs
+      counsel-yank-pop-separator)))
 
-    ;; NOTE: this variable do not work if defined in :custom
-    (setq ivy-format-function 'ivy-format-function-pretty)
-    (setq counsel-yank-pop-separator
+  ;; NOTE: this variable do not work if defined in :custom
+  (setq ivy-format-function 'ivy-format-function-pretty)
+  (setq counsel-yank-pop-separator
         (propertize "\n────────────────────────────────────────────────────────\n"
-               'face `(:foreground "#6272a4")))
+                    'face `(:foreground "#6272a4")))
 
-    ;; Integration with `projectile'
-    (with-eval-after-load 'projectile
-      (setq projectile-completion-system 'ivy))
-    ;; Integration with `magit'
-    (with-eval-after-load 'magit
-      (setq magit-completing-read-function 'ivy-completing-read))
+  ;; Integration with `projectile'
+  (with-eval-after-load 'projectile
+    (setq projectile-completion-system 'ivy))
+  ;; Integration with `magit'
+  (with-eval-after-load 'magit
+    (setq magit-completing-read-function 'ivy-completing-read))
 
-    ;; Enhance fuzzy matching
-    (use-package flx)
-    ;; Enhance M-x
-    (use-package amx)
-    ;; Ivy integration for Projectile
-    (use-package counsel-projectile
-      :config (counsel-projectile-mode 1))
+  ;; Enhance fuzzy matching
+  (use-package flx)
+  ;; Enhance M-x
+  (use-package amx)
+  ;; Ivy integration for Projectile
+  (use-package counsel-projectile
+    :config (counsel-projectile-mode 1))
 
   ;; Show ivy frame using posframe
   (use-package ivy-posframe
@@ -242,8 +252,8 @@ There are two things you can do about this warning:
     ;; (ivy-posframe-width 130)
     ;; (ivy-posframe-height 11)
     (ivy-posframe-parameters
-      '((left-fringe . 5)
-        (right-fringe . 5)))
+     '((left-fringe . 5)
+       (right-fringe . 5)))
     :custom-face
     (ivy-posframe ((t (:background "#282a36"))))
     (ivy-posframe-border ((t (:background "#6272a4"))))
@@ -284,21 +294,21 @@ There are two things you can do about this warning:
     (defun ivy-rich-org-capture-icon (candidate)
       "Display repo icons in `ivy-rich`."
       (pcase (car (last (split-string (car (split-string candidate)) "-")))
-         ("emacs" (all-the-icons-fileicon "emacs" :height .68 :v-adjust .001))
-         ("schedule" (all-the-icons-faicon "calendar" :height .68 :v-adjust .005))
-         ("tweet" (all-the-icons-faicon "commenting" :height .7 :v-adjust .01))
-         ("link" (all-the-icons-faicon "link" :height .68 :v-adjust .01))
-         ("memo" (all-the-icons-faicon "pencil" :height .7 :v-adjust .01))
-         (_       (all-the-icons-octicon "inbox" :height .68 :v-adjust .01))
-         ))
+        ("emacs" (all-the-icons-fileicon "emacs" :height .68 :v-adjust .001))
+        ("schedule" (all-the-icons-faicon "calendar" :height .68 :v-adjust .005))
+        ("tweet" (all-the-icons-faicon "commenting" :height .7 :v-adjust .01))
+        ("link" (all-the-icons-faicon "link" :height .68 :v-adjust .01))
+        ("memo" (all-the-icons-faicon "pencil" :height .7 :v-adjust .01))
+        (_       (all-the-icons-octicon "inbox" :height .68 :v-adjust .01))
+        ))
 
     (defun ivy-rich-org-capture-title (candidate)
       (let* ((octl (split-string candidate))
              (title (pop octl))
              (desc (mapconcat 'identity octl " ")))
         (format "%-25s %s"
-                 title
-                 (propertize desc 'face `(:inherit font-lock-doc-face)))))
+                title
+                (propertize desc 'face `(:inherit font-lock-doc-face)))))
 
     (defun ivy-rich-buffer-icon (candidate)
       "Display buffer icons in `ivy-rich'."
@@ -438,18 +448,18 @@ There are two things you can do about this warning:
     (setq ivy-rich-parse-remote-buffer nil)
     :config
     (ivy-rich-mode 1))
-)
+  )
 
 ;; dashboard
 (use-package dashboard
-    :diminish
-    (dashboard-mode page-break-lines-mode)
-    :custom
-    (dashboard-startup-banner 4)
-    (dashboard-items '((recents . 15)
-               (projects . 5)))
-    :hook
-    (after-init . dashboard-setup-startup-hook))
+  :diminish
+  (dashboard-mode page-break-lines-mode)
+  :custom
+  (dashboard-startup-banner 4)
+  (dashboard-items '((recents . 15)
+                     (projects . 5)))
+  :hook
+  (after-init . dashboard-setup-startup-hook))
 (setq initial-buffer-choice (lambda () (get-buffer "*dashboard*")))
 
 ;; terraform
@@ -462,25 +472,170 @@ There are two things you can do about this warning:
 
 ;; dimmer
 (use-package dimmer
+  :disabled
+  :custom
+  (dimmer-fraction 0.5)
+  (dimmer-exclusion-regexp-list
+       '(".*Minibuf.*"
+         ".*which-key.*"
+         ".*NeoTree.*"
+         ".*Messages.*"
+         ".*Async.*"
+         ".*Warnings.*"
+         ".*LV.*"
+         ".*Ilist.*"))
   :config
-  (dimmer-mode))
+  (dimmer-mode t))
 
 ;; zoom
 (use-package zoom
   :config
-  (zoom-mode))
-(custom-set-variables
- '(zoom-size '(0.618 . 0.618)))
+  (zoom-mode)
+  (custom-set-variables
+ '(zoom-size '(0.618 . 0.618))))
 
-;; buffer-expose
-(buffer-expose-mode 1)
-(defvar buffer-expose-mode-map
-  (let ((map (make-sparse-keymap)))
-    (define-key map (kbd "<s-tab>") 'buffer-expose)
-    (define-key map (kbd "<C-tab>") 'buffer-expose-no-stars)
-    (define-key map (kbd "C-c <C-tab>") 'buffer-expose-current-mode)
-    (define-key map (kbd "C-c C-m") 'buffer-expose-major-mode)
-    (define-key map (kbd "C-c C-d") 'buffer-expose-dired-buffers)
-    (define-key map (kbd "C-c C-*") 'buffer-expose-stars)
-    map)
-  "Mode map for command `buffer-expose-mode'.")
+;; yaml-mode
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+
+;; markdown-mode
+(use-package markdown-mode
+  :commands (markdown-mode gfm-mode)
+  :mode (("\\.md\\'" . gfm-mode)
+         ("\\.markdown\\'" . gfm-mode))
+  :config
+  (setq
+   markdown-command "github-markup"
+   markdown-command-needs-filename t
+   markdown-content-type "application/xhtml+xml"
+   markdown-css-paths '("https://cdn.jsdelivr.net/npm/github-markdown-css/github-markdown.min.css")
+   markdown-xhtml-header-content "
+<style>
+body {
+  box-sizing: border-box;
+  max-width: 740px;
+  width: 100%;
+  margin: 40px auto;
+  padding: 0 10px;
+}
+</style>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  document.body.classList.add('markdown-body');
+});
+</script>
+" ))
+
+;; volatile-highlights
+(use-package volatile-highlights
+  :diminish
+  :hook
+  (after-init . volatile-highlights-mode)
+  :custom-face
+  (vhl/default-face ((nil (:foreground "#FF3333" :background "#FFCDCD")))))
+
+;; rainbow-delimiters
+(use-package rainbow-delimiters
+  :hook
+  (prog-mode . rainbow-delimiters-mode))
+
+;; paren custom
+(use-package paren
+  :ensure nil
+  :hook
+  (after-init . show-paren-mode)
+  :custom-face
+  (show-paren-match ((nil (:background "#44475a" :foreground "#f1fa8c"))))
+  :custom
+  (show-paren-style 'mixed)
+  (show-paren-when-point-inside-paren t)
+  (show-paren-when-point-in-periphery t))
+
+;; beacon
+(use-package beacon
+  :custom
+  (beacon-color "yellow")
+  :config
+  (beacon-mode 1))
+
+;; presentation
+(use-package presentation)
+
+;; anzu
+(use-package anzu
+  :diminish
+  :bind
+  ("C-r"   . anzu-query-replace-regexp)
+  ("C-M-r" . anzu-query-replace-at-cursor-thing)
+  :hook
+  (after-init . global-anzu-mode))
+
+;; whitespace
+(require 'whitespace)
+(setq whitespace-style '(face
+                         trailing
+                         tabs
+                         spaces
+                         empty
+                         space-mark
+                         tab-mark
+                         ))
+
+(setq whitespace-display-mappings
+      '((space-mark ?\u3000 [?\u25a1])
+        ;; WARNING: the mapping below has a problem.
+        ;; When a TAB occupies exactly one column, it will display the
+        ;; character ?\xBB at that column followed by a TAB which goes to
+        ;; the next TAB column.
+        ;; If this is a problem for you, please, comment the line below.
+        (tab-mark ?\t [?\u00BB ?\t] [?\\ ?\t])))
+
+
+(setq whitespace-space-regexp "\\(\u3000+\\)")
+
+(setq whitespace-action '(auto-cleanup))
+
+(global-whitespace-mode 1)
+
+(defvar my/bg-color "#232323")
+(set-face-attribute 'whitespace-trailing nil
+                    :background my/bg-color
+                    :foreground "DeepPink"
+                    :underline t)
+(set-face-attribute 'whitespace-tab nil
+                    :background my/bg-color
+                    :foreground "LightSkyBlue"
+                    :underline t)
+(set-face-attribute 'whitespace-space nil
+                    :background my/bg-color
+                    :foreground "GreenYellow"
+                    :weight 'bold)
+(set-face-attribute 'whitespace-empty nil
+                    :background my/bg-color)
+
+(add-hook 'markdown-mode-hook
+          '(lambda ()
+             (set (make-local-variable 'whitespace-action) nil)))
+
+;; rust-mode
+(use-package rust-mode)
+
+;; auto-sudoedit
+(use-package auto-sudoedit
+ :ensure t
+ :config
+ (auto-sudoedit-mode 1))
+
+;; tool-bar
+(tool-bar-mode 0)
+
+;; ring-bell
+(setq ring-bell-function 'ignore)
+
+;; undohist
+(use-package undohist
+  :ensure t
+  :config
+  (setq undohist-ignored-files '("/tmp" "COMMIT_EDITMSG"))
+  (undohist-initialize))
