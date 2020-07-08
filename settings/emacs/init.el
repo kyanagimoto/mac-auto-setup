@@ -73,7 +73,7 @@ There are two things you can do about this warning:
  '(ivy-use-virtual-buffers t)
  '(package-selected-packages
    (quote
-    (undohist auto-sudoedit rust-mode anzu presentation org-pomodoro beacon rainbow-delimiters volatile-highlights org-plus-contrib zoom dimmer company-terraform dashboard wgrep-ag counsel-projectile amx flx ag highlight-indent-guides all-the-icons-ivy all-the-icons-ivy-rich ivy-rich dumb-jump projectile-rails undo-tree robe ruby-electric company-inf-ruby company counsel ivy use-package doom-themes doom-modeline)))
+    (company-tabnine undohist auto-sudoedit rust-mode anzu presentation org-pomodoro beacon rainbow-delimiters volatile-highlights org-plus-contrib zoom dimmer company-terraform dashboard wgrep-ag counsel-projectile amx flx ag highlight-indent-guides all-the-icons-ivy all-the-icons-ivy-rich ivy-rich dumb-jump projectile-rails undo-tree robe ruby-electric company-inf-ruby company counsel ivy use-package doom-themes doom-modeline)))
  '(show-paren-style (quote mixed))
  '(show-paren-when-point-in-periphery t)
  '(show-paren-when-point-inside-paren t)
@@ -639,3 +639,14 @@ document.addEventListener('DOMContentLoaded', () => {
   :config
   (setq undohist-ignored-files '("/tmp" "COMMIT_EDITMSG"))
   (undohist-initialize))
+
+;; company-mode
+(add-hook 'after-init-hook 'global-company-mode)
+
+;; tabnine
+(use-package company-tabnine :ensure t)
+(add-to-list 'company-backends #'company-tabnine)
+;; Trigger completion immediately.
+(setq company-idle-delay 0)
+;; Number the candidates (use M-1, M-2 etc to select completions).
+(setq company-show-numbers t)
