@@ -4,5 +4,6 @@
 # Alias
 #
 echo ' ---------- Alias ----------'
-echo 'alias ec="emacsclient -n"' >> ~/.zshrc
+echo 'alias ec="emacsclient -n"' >> ~/.zsh.after/alias.zsh
+echo 'alias be="bundle exec"' >> ~/.zsh.after/alias.zsh
 echo ' ---------- END ---------- '
