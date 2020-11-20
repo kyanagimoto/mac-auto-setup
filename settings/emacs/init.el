@@ -117,6 +117,7 @@ There are two things you can do about this warning:
 
 ;; Ruby
 (add-hook 'ruby-mode-hook 'robe-mode)
+(setq ruby-insert-encoding-magic-comment nil)
 
 ;; dumb-jump
 (setq dumb-jump-mode t)
