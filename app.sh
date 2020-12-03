@@ -37,6 +37,7 @@ brew cask install zoomus
 brew cask install emacs
 brew cask install viber
 brew cask install alfred
+brew cask install clipy
 
 #while true; do
 #  read -p 'Add "need license" apps? [Y/n]' Answer
