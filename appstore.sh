@@ -22,4 +22,5 @@ mas install 539883307  # LINE (4.11.1)
 #mas install 476533227  # Prepo (2.2.7)
 #mas install 414298354  # ToyViewer (5.5.1)
 #mas install 549083868  # Display Menu (2.2.3)
+mas install 1142151959  # Just Focus
 echo " ------------ END ------------"

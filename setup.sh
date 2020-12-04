@@ -268,6 +268,15 @@ if ! command_exists jq ; then
     echo " ---------- END ---------- "
 fi
 
+#
+# Install stern
+#
+if ! command_exists stern ; then
+    echo "----------- stern -------------"
+    brew install stern
+    echo " ---------- END ---------- "
+fi
+
 while true; do
   read -p 'Now install web apps? [Y/n]' Answer
   case $Answer in
